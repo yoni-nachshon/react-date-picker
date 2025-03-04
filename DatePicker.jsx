@@ -1,8 +1,27 @@
-export function DatePicker() {
+const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+};
+
+const parseDate = (str) => {
+    const [day, month, year] = str.split('/').map(Number);
+    if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+        const date = new Date(year, month - 1, day);
+        if (date.getDate() === day && date.getMonth() === month - 1 && date.getFullYear() === year) {
+            return date;
+        }
+    }
+    return null;
+};
+
+export function DatePicker({ initialDate, onDateSelect }) {
     const { useState, useEffect, useRef } = React;
-    const [selectedDate, setSelectedDate] = useState(null);
+    initialDate = initialDate ? new Date(initialDate) : null;
+    const [selectedDate, setSelectedDate] = useState(initialDate || null);
     const [showCalendar, setShowCalendar] = useState(false);
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState(initialDate ? formatDate(initialDate) : '');
     const [showMonthPicker, setShowMonthPicker] = useState(false);
     const [showYearPicker, setShowYearPicker] = useState(false);
     const datePickerRef = useRef(null);
@@ -10,14 +29,17 @@ export function DatePicker() {
     const daysOfWeek = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'];
     const months = ['ינו', 'פבר', 'מרץ', 'אפר', 'מאי', 'יונ', 'יול', 'אוג', 'ספט', 'אוק', 'נוב', 'דצמ'];
     const today = new Date();
-    const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-    const [currentYear, setCurrentYear] = useState(today.getFullYear());
+    const [currentMonth, setCurrentMonth] = useState(initialDate ? initialDate.getMonth() : today.getMonth());
+    const [currentYear, setCurrentYear] = useState(initialDate ? initialDate.getFullYear() : today.getFullYear());
     const [startYear, setStartYear] = useState(today.getFullYear() - 5);
 
     const handleDateClick = (date) => {
         setSelectedDate(date);
         setInputValue(formatDate(date));
         setShowCalendar(false);
+        if (onDateSelect) {
+            onDateSelect(date);
+        }
     };
 
     const handleClickOutside = (event) => {
@@ -35,23 +57,6 @@ export function DatePicker() {
         };
     }, []);
 
-    const formatDate = (date) => {
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-    };
-
-    const parseDate = (str) => {
-        const [day, month, year] = str.split('/').map(Number);
-        if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
-            const date = new Date(year, month - 1, day);
-            if (date.getDate() === day && date.getMonth() === month - 1 && date.getFullYear() === year) {
-                return date;
-            }
-        }
-        return null;
-    };
 
     const handleInputChange = (event) => {
         const value = event.target.value;
@@ -188,12 +193,18 @@ export function DatePicker() {
         setCurrentMonth(today.getMonth());
         setCurrentYear(today.getFullYear());
         setShowCalendar(false);
+        if (onDateSelect) {
+            onDateSelect(today);
+        }
     };
 
     const handleClearClick = () => {
         setSelectedDate(null);
         setInputValue('');
         setShowCalendar(false);
+        if (onDateSelect) {
+            onDateSelect(null);
+        }
     };
 
     const renderMonthPicker = () => (
