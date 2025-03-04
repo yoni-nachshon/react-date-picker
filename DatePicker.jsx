@@ -233,22 +233,48 @@ export function DatePicker({ initialDate, onDateSelect }) {
         );
     };
 
-    return (
-        <div className="date-picker" ref={datePickerRef}><input
-            type="text"
-            className="date-input"
-            value={inputValue}
-            onFocus={() => setShowCalendar(true)}
-            onChange={handleInputChange}
-            placeholder="בחר תאריך"
-        />
-            {showCalendar && (
-                <div className="calendar"><div className="calendar-header"><div onClick={handlePrevMonth} className="arrow"><i className="icofont-arrow-right"></i></div><span onClick={handleHeaderClick} className="header-clickable">
-                    {showYearPicker ? `${startYear} - ${startYear + 11}` : showMonthPicker ? currentYear : `${months[currentMonth]} ${currentYear}`}
-                </span><div onClick={handleNextMonth} className="arrow"><i className="icofont-arrow-left"></i></div></div>
-                    {showMonthPicker ? renderMonthPicker() : showYearPicker ? renderYearPicker() : renderCalendar()}
-                    <div className="calendar-footer"><div onClick={handleTodayClick} className="footer-button">היום</div><div onClick={handleClearClick} className="footer-button">נקה</div></div></div>
-            )}
+   return (
+    <div className="date-picker" ref={datePickerRef}>
+      <input
+        type="text"
+        className="date-input"
+        value={inputValue}
+        onFocus={() => setShowCalendar(true)}
+        onChange={handleInputChange}
+        placeholder="בחר תאריך"
+      />
+      {showCalendar && (
+        <div className="calendar">
+          <div className="calendar-header">
+            <div onClick={handlePrevMonth} className="arrow">
+              <i className="icofont-arrow-right"></i>
+            </div>
+            <span onClick={handleHeaderClick} className="header-clickable">
+              {showYearPicker
+                ? `${startYear} - ${startYear + 11}`
+                : showMonthPicker
+                ? currentYear
+                : `${months[currentMonth]} ${currentYear}`}
+            </span>
+            <div onClick={handleNextMonth} className="arrow">
+              <i className="icofont-arrow-left"></i>
+            </div>
+          </div>
+          {showMonthPicker
+            ? renderMonthPicker()
+            : showYearPicker
+            ? renderYearPicker()
+            : renderCalendar()}
+          <div className="calendar-footer">
+            <div onClick={handleTodayClick} className="footer-button">
+              היום
+            </div>
+            <div onClick={handleClearClick} className="footer-button">
+              נקה
+            </div>
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 }
