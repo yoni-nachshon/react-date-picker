@@ -10,7 +10,7 @@
 .date-input {
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc !important;
     border-radius: 0 4px 4px 0;
     width: 152px;
     /* Adjusted to fit within the 200px calendar width */
@@ -159,13 +159,8 @@
 }
 
 .preset-select {
-    appearance: none; /* Hide default arrow */
-    -webkit-appearance: none; /* Hide default arrow in Safari */
-    -moz-appearance: none; /* Hide default arrow in Firefox */
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="var(--primary-color)" class="bi bi-caret-down-fill" viewBox="0 0 16 16"><path d="M7.247 11.14l-4.796-5.481C1.451 5.253 1.675 4.5 2.354 4.5h9.292c.68 0 .903.753.403 1.159l-4.796 5.481a1 1 0 0 1-1.51 0z"/></svg>') no-repeat center center; /* Add your custom icon */
-    background-size: 16px; /* Adjust the size of the icon */
     padding-right: 20px; /* Add some padding to the right to make space for the icon */
-    border: 1px solid #ababab; /* Add border if needed */
+    border: 1px solid #ccc; /* Add border if needed */
     border-radius: 4px 0 0 4px; /* Add border radius to the right side */
     height: 30px; /* Adjust the height if needed */
     width: 24px;
@@ -186,7 +181,7 @@
     align-items: center;
     justify-content: center;
     padding: 0 8px; /* Add padding to center the icon */
-    border: 1px solid #ababab;
+    border: 1px solid #ccc;
     cursor: pointer; /* Change cursor to pointer */
     width: 24px;
     border-right: none; /* Remove left border */
@@ -202,7 +197,7 @@
     align-items: center;
     justify-content: center;
     padding: 0 8px; /* Add padding to center the icon */
-    border: 1px solid #ababab; /* Add border */
+    border: 1px solid #ccc; /* Add border */
     border-radius: 4px 0 0 4px; /* Add border radius to the right side */
     border-right: none;
     height: 30px; /* Adjust the height if needed */
