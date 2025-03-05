@@ -1,22 +1,4 @@
-const formatDate = (date) => {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-};
-
-const parseDate = (str) => {
-    const [day, month, year] = str.split('/').map(Number);
-    if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
-        const date = new Date(year, month - 1, day);
-        if (date.getDate() === day && date.getMonth() === month - 1 && date.getFullYear() === year) {
-            return date;
-        }
-    }
-    return null;
-};
-
-export function DatePicker({ initialDate, onDateSelect }) {
+export const DatePicker = ({ initialDate, onDateSelect }) => {
     const { useState, useEffect, useRef } = React;
     initialDate = initialDate ? new Date(initialDate) : null;
     const [selectedDate, setSelectedDate] = useState(initialDate || null);
@@ -32,6 +14,24 @@ export function DatePicker({ initialDate, onDateSelect }) {
     const [currentMonth, setCurrentMonth] = useState(initialDate ? initialDate.getMonth() : today.getMonth());
     const [currentYear, setCurrentYear] = useState(initialDate ? initialDate.getFullYear() : today.getFullYear());
     const [startYear, setStartYear] = useState(today.getFullYear() - 5);
+
+    function formatDate(date){
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+    
+    function parseDate(str) {
+        const [day, month, year] = str.split('/').map(Number);
+        if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+            const date = new Date(year, month - 1, day);
+            if (date.getDate() === day && date.getMonth() === month - 1 && date.getFullYear() === year) {
+                return date;
+            }
+        }
+        return null;
+    };
 
     const handleDateClick = (date) => {
         setSelectedDate(date);
@@ -233,48 +233,22 @@ export function DatePicker({ initialDate, onDateSelect }) {
         );
     };
 
-   return (
-    <div className="date-picker" ref={datePickerRef}>
-      <input
-        type="text"
-        className="date-input"
-        value={inputValue}
-        onFocus={() => setShowCalendar(true)}
-        onChange={handleInputChange}
-        placeholder="בחר תאריך"
-      />
-      {showCalendar && (
-        <div className="calendar">
-          <div className="calendar-header">
-            <div onClick={handlePrevMonth} className="arrow">
-              <i className="icofont-arrow-right"></i>
-            </div>
-            <span onClick={handleHeaderClick} className="header-clickable">
-              {showYearPicker
-                ? `${startYear} - ${startYear + 11}`
-                : showMonthPicker
-                ? currentYear
-                : `${months[currentMonth]} ${currentYear}`}
-            </span>
-            <div onClick={handleNextMonth} className="arrow">
-              <i className="icofont-arrow-left"></i>
-            </div>
-          </div>
-          {showMonthPicker
-            ? renderMonthPicker()
-            : showYearPicker
-            ? renderYearPicker()
-            : renderCalendar()}
-          <div className="calendar-footer">
-            <div onClick={handleTodayClick} className="footer-button">
-              היום
-            </div>
-            <div onClick={handleClearClick} className="footer-button">
-              נקה
-            </div>
-          </div>
+    return (
+        <div className="date-picker" ref={datePickerRef}><input
+            type="text"
+            className="date-input"
+            value={inputValue}
+            onFocus={() => setShowCalendar(true)}
+            onChange={handleInputChange}
+            placeholder="בחר תאריך"
+        />
+            {showCalendar && (
+                <div className="calendar"><div className="calendar-header"><div onClick={handlePrevMonth} className="arrow"><i className="icofont-arrow-right"></i></div><span onClick={handleHeaderClick} className="header-clickable">
+                    {showYearPicker ? `${startYear} - ${startYear + 11}` : showMonthPicker ? currentYear : `${months[currentMonth]} ${currentYear}`}
+                </span><div onClick={handleNextMonth} className="arrow"><i className="icofont-arrow-left"></i></div></div>
+                    {showMonthPicker ? renderMonthPicker() : showYearPicker ? renderYearPicker() : renderCalendar()}
+                    <div className="calendar-footer"><div onClick={handleTodayClick} className="footer-button">היום</div><div onClick={handleClearClick} className="footer-button">נקה</div></div></div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 }
