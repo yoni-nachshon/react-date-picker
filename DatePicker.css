@@ -1,19 +1,30 @@
+:root {
+    --primary-color: #00618b;
+}
+
 .date-picker {
     position: relative;
-    display: inline-block;
+    display: flex;
 }
 
 .date-input {
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 180px;
+    border-radius: 0 4px 4px 0;
+    width: 152px;
     /* Adjusted to fit within the 200px calendar width */
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: #ced4da;
+    box-shadow: none;
 }
 
 .calendar {
     position: absolute;
+    top: 30px;
     background: white;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -145,4 +156,81 @@
 
 .footer-button:hover {
     background: #e0e0e0;
+}
+
+.preset-select {
+    appearance: none; /* Hide default arrow */
+    -webkit-appearance: none; /* Hide default arrow in Safari */
+    -moz-appearance: none; /* Hide default arrow in Firefox */
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="var(--primary-color)" class="bi bi-caret-down-fill" viewBox="0 0 16 16"><path d="M7.247 11.14l-4.796-5.481C1.451 5.253 1.675 4.5 2.354 4.5h9.292c.68 0 .903.753.403 1.159l-4.796 5.481a1 1 0 0 1-1.51 0z"/></svg>') no-repeat center center; /* Add your custom icon */
+    background-size: 16px; /* Adjust the size of the icon */
+    padding-right: 20px; /* Add some padding to the right to make space for the icon */
+    border: 1px solid #ababab; /* Add border if needed */
+    border-radius: 4px 0 0 4px; /* Add border radius to the right side */
+    height: 30px; /* Adjust the height if needed */
+    width: 24px;
+    cursor: pointer; /* Change cursor to pointer */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    border-right: none; /* Remove left border */
+}
+
+.preset-select:focus {
+    outline: none;
+    border-color: #ced4da;
+    box-shadow: none;
+}
+
+.calendar-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px; /* Add padding to center the icon */
+    border: 1px solid #ababab;
+    cursor: pointer; /* Change cursor to pointer */
+    width: 24px;
+    border-right: none; /* Remove left border */
+    color: var(--primary-color);
+}
+
+.calendar-icon-container.rounded-left {
+    border-radius: 4px 0 0 4px; /* Add left border radius */
+}
+
+.preset-select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px; /* Add padding to center the icon */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 4px 0 0 4px; /* Add border radius to the right side */
+    border-right: none;
+    height: 30px; /* Adjust the height if needed */
+    width: 24px;
+    cursor: pointer; /* Change cursor to pointer */
+    position: relative; /* For dropdown positioning */
+}
+
+.preset-select i {
+    color: var(--primary-color); /* Use CSS variable for color */
+}
+
+.preset-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 1000;
+    width: max-content;
+}
+
+.preset-option {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.preset-option:hover {
+    background-color: #f0f0f0;
 }
