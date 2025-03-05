@@ -202,7 +202,7 @@
     align-items: center;
     justify-content: center;
     padding: 0 8px; /* Add padding to center the icon */
-    border: 1px solid #ccc; /* Add border */
+    border: 1px solid #ababab; /* Add border */
     border-radius: 4px 0 0 4px; /* Add border radius to the right side */
     border-right: none;
     height: 30px; /* Adjust the height if needed */
