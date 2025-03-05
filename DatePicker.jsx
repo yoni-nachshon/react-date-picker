@@ -1,4 +1,4 @@
-export const DatePicker = ({ initialDate, onDateSelect }) => {
+export const DatePicker = ({ initialDate, onDateSelect, presetValues = [7, 14, 30, 45, null], showPresetSelect = true }) => {
     const { useState, useEffect, useRef } = React;
     initialDate = initialDate ? new Date(initialDate) : null;
     const [selectedDate, setSelectedDate] = useState(initialDate || null);
@@ -15,13 +15,70 @@ export const DatePicker = ({ initialDate, onDateSelect }) => {
     const [currentYear, setCurrentYear] = useState(initialDate ? initialDate.getFullYear() : today.getFullYear());
     const [startYear, setStartYear] = useState(today.getFullYear() - 5);
 
-    function formatDate(date){
+    const [selectedPreset, setSelectedPreset] = useState("");
+    const [showPresetDropdown, setShowPresetDropdown] = useState(false);
+
+    const titleMap = {
+        7: "שבוע",
+        14: "שבועיים",
+        30: "חודש",
+        60: "חודשיים",
+        180: "חצי שנה",
+        365: "שנה",
+    };
+
+    const generatePresetDates = (values) => {
+        return values?.map((value) => {
+            if (value === null) {
+                return { label: "ללא", value: null };
+            } else {
+                const label = titleMap[value] || `${value} יום`;
+                return { label, value };
+            }
+        });
+    };
+
+    const presetDates = generatePresetDates(presetValues);
+
+    const handlePresetOptionClick = (preset) => {
+        setSelectedPreset(preset.value);
+        handlePresetSelect(preset);
+        setShowPresetDropdown(false);
+        setShowCalendar(false); // Close the calendar
+    };
+
+    const handlePresetSelect = (preset) => {
+        const newDate = new Date();
+        if (preset.value === null) {
+            setSelectedDate(null);
+            setInputValue('');
+            if (onDateSelect) {
+                onDateSelect(null);
+            }
+        } else {
+            newDate.setDate(newDate.getDate() + preset.value);
+            setSelectedDate(newDate);
+            setInputValue(formatDate(newDate));
+            setCurrentMonth(newDate.getMonth());
+            setCurrentYear(newDate.getFullYear());
+            if (onDateSelect) {
+                onDateSelect(newDate);
+            }
+        }
+        setSelectedPreset("");
+    };
+
+    const handleCalendarIconClick = () => {
+        setShowCalendar(!showCalendar);
+    };
+
+    function formatDate(date) {
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     };
-    
+
     function parseDate(str) {
         const [day, month, year] = str.split('/').map(Number);
         if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
@@ -234,20 +291,44 @@ export const DatePicker = ({ initialDate, onDateSelect }) => {
     };
 
     return (
-        <div className="date-picker" ref={datePickerRef}><input
-            type="text"
-            className="date-input"
-            value={inputValue}
-            onFocus={() => setShowCalendar(true)}
-            onChange={handleInputChange}
-            placeholder="בחר תאריך"
-        />
+        <div className="date-picker" ref={datePickerRef}>
+            <input
+                type="text"
+                className="date-input"
+                value={inputValue}
+                onFocus={() => setShowCalendar(true)}
+                onChange={handleInputChange}
+                placeholder="בחר תאריך"
+            />
             {showCalendar && (
                 <div className="calendar"><div className="calendar-header"><div onClick={handlePrevMonth} className="arrow"><i className="icofont-arrow-right"></i></div><span onClick={handleHeaderClick} className="header-clickable">
                     {showYearPicker ? `${startYear} - ${startYear + 11}` : showMonthPicker ? currentYear : `${months[currentMonth]} ${currentYear}`}
                 </span><div onClick={handleNextMonth} className="arrow"><i className="icofont-arrow-left"></i></div></div>
                     {showMonthPicker ? renderMonthPicker() : showYearPicker ? renderYearPicker() : renderCalendar()}
                     <div className="calendar-footer"><div onClick={handleTodayClick} className="footer-button">היום</div><div onClick={handleClearClick} className="footer-button">נקה</div></div></div>
+            )}
+            <div
+                onClick={handleCalendarIconClick}
+                className={`calendar-icon-container ${showPresetSelect ? '' : 'rounded-left'}`}
+            >
+                <i className="icofont-calendar"></i>
+            </div>
+            {showPresetSelect && (
+                <div className="preset-select" onClick={() => setShowPresetDropdown(!showPresetDropdown)}>
+                    <i className="icofont-caret-down"></i>
+                    {showPresetDropdown && (
+                        <div className="preset-dropdown">
+                            {presetDates?.map((preset, index) => (
+                                <div
+                                    key={index}
+                                    className="preset-option"
+                                    onClick={() => handlePresetOptionClick(preset)}>
+                                    {preset.label}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             )}
         </div>
     );
