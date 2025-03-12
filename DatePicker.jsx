@@ -70,6 +70,9 @@ export const DatePicker = ({ initialDate, onDateSelect, presetValues = [7, 14, 3
 
     const handleCalendarIconClick = () => {
         setShowCalendar(!showCalendar);
+        if (!showCalendar) {
+        setShowPresetDropdown(false);
+        }
     };
 
     function formatDate(date) {
@@ -296,7 +299,10 @@ export const DatePicker = ({ initialDate, onDateSelect, presetValues = [7, 14, 3
                 type="text"
                 className="date-input"
                 value={inputValue}
-                onFocus={() => setShowCalendar(true)}
+                onFocus={() => {
+                  setShowCalendar(true);
+                  setShowPresetDropdown(false);
+                }}
                 onChange={handleInputChange}
                 placeholder="בחר תאריך"
             />
@@ -314,7 +320,15 @@ export const DatePicker = ({ initialDate, onDateSelect, presetValues = [7, 14, 3
                 <i className="icofont-calendar"></i>
             </div>
             {showPresetSelect && (
-                <div className="preset-select" onClick={() => setShowPresetDropdown(!showPresetDropdown)}>
+                <div 
+                  className="preset-select" 
+                  onClick={() => {
+                    setShowPresetDropdown(!showPresetDropdown);
+                    if (!showPresetDropdown) {
+                      setShowCalendar(false);
+                    }
+                  }}
+                 >
                     <i className="icofont-caret-down"></i>
                     {showPresetDropdown && (
                         <div className="preset-dropdown">
