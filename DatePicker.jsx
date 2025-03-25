@@ -96,6 +96,8 @@ export const DatePicker = ({ initialDate, onDateSelect, presetValues = [7, 14, 3
     const handleDateClick = (date) => {
         setSelectedDate(date);
         setInputValue(formatDate(date));
+        setCurrentMonth(date.getMonth());
+        setCurrentYear(date.getFullYear());
         setShowCalendar(false);
         if (onDateSelect) {
             onDateSelect(date);
@@ -129,74 +131,85 @@ export const DatePicker = ({ initialDate, onDateSelect, presetValues = [7, 14, 3
         }
     };
 
-    const renderCalendar = () => {
-        const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-        const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
-        const weeks = [];
-        let days = [];
-
-        // Add days from previous month
-        for (let i = firstDayOfMonth - 1; i >= 0; i--) {
-            days.push(
-                <td
-                    key={`prev-${i}`}
-                    className="prev-month"
-                    onClick={() => handleDateClick(new Date(currentYear, currentMonth - 1, daysInPrevMonth - i))}
-                >
-                    {daysInPrevMonth - i}
-                </td>
-            );
-        }
-
-        // Add days from current month
-        for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(currentYear, currentMonth, day);
-            const isToday = date.toDateString() === new Date().toDateString();
-            const isWorkday = date.getDay() >= 0 && date.getDay() <= 4; // Sunday to Thursday
-
-            if (days.length === 7) {
-                weeks.push(<tr key={`week-${weeks.length}`}>{days}</tr>);
-                days = [];
-            }
-            days.push(
-                <td
-                    key={day}
-                    className={`
-              ${selectedDate && selectedDate.getDate() === day && selectedDate.getMonth() === currentMonth && selectedDate.getFullYear() === currentYear ? 'selected' : ''}
-              ${isToday ? 'today' : ''}
-              ${isWorkday ? 'workday' : ''}
-            `}
-                    onClick={() => handleDateClick(new Date(currentYear, currentMonth, day))}
-                >
-                    {day}
-                </td>
-            );
-        }
-
-        // Add days from next month
-        let nextMonthDay = 1;
-        while (days.length < 7) {
-            days.push(
-                <td
-                    key={`next-${nextMonthDay}`}
-                    className="next-month"
-                    onClick={() => handleDateClick(new Date(currentYear, currentMonth + 1, nextMonthDay))}
-                >
-                    {nextMonthDay++}
-                </td>
-            );
-        }
+const renderCalendar = () => {
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+    const weeks = [];
+    let days = [];
+    // Add days from previous month
+    for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+      days.push(
+        <td
+          key={`prev-${i}`}
+          className="prev-month"
+          onClick={() =>
+            handleDateClick(
+              new Date(currentYear, currentMonth - 1, daysInPrevMonth - i)
+            )
+          }
+        >
+          {daysInPrevMonth - i}
+        </td>
+      );
+    }
+    // Add days from current month
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(currentYear, currentMonth, day);
+      const isToday = date.toDateString() === new Date().toDateString();
+      const isWorkday = date.getDay() >= 0 && date.getDay() <= 4; // Sunday to Thursday
+      if (days.length === 7) {
         weeks.push(<tr key={`week-${weeks.length}`}>{days}</tr>);
-
-        return (
-            <table><thead><tr>
-                {daysOfWeek.map((day, index) => (
-                    <th key={index}>{day}</th>
-                ))}
-            </tr></thead><tbody>{weeks}</tbody></table>
+        days = [];
+      }
+      days.push(
+        <td
+          key={day}
+          className={`${
+            selectedDate &&
+            selectedDate.getDate() === day &&
+            selectedDate.getMonth() === currentMonth &&
+            selectedDate.getFullYear() === currentYear
+              ? "selected"
+              : ""
+          } ${isToday ? "today" : ""} ${isWorkday ? "workday" : ""}`}
+          onClick={() => handleDateClick(new Date(currentYear, currentMonth, day))}
+        >
+          {day}
+        </td>
+      );
+    }
+    // Add days from next month
+    const addNextMonthDays = () => {
+      let nextMonthDay = 1;
+      while (days.length < 7) {
+        const day = nextMonthDay;
+        days.push(
+          <td
+            key={`next-${day}`}
+            className="next-month"
+            onClick={() =>
+              handleDateClick(
+                new Date(currentYear, currentMonth + 1, day)
+              )
+            }
+          >
+            {day}
+          </td>
         );
+        nextMonthDay++;
+      }
     };
+    addNextMonthDays();
+    weeks.push(<tr key={`week-${weeks.length}`}>{days}</tr>);
+    return (
+      <table><thead><tr>
+            {daysOfWeek.map((day, index) => (
+              <th key={index}>{day}</th>
+            ))}
+          </tr></thead><tbody>{weeks}</tbody></table>
+    );
+  };
 
     const handlePrevMonth = (event) => {
         event.preventDefault();
