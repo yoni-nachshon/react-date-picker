@@ -5,7 +5,7 @@ export const DatePicker = ({
   onDateSelect,
   presetValues = [7, 14, 30, 45, null],
   showPresetSelect = true,
-  style={},
+  style = {},
   disabled = false
 }) => {
   initialDate = initialDate ? new Date(initialDate) : null;
@@ -28,7 +28,7 @@ export const DatePicker = ({
       // Find the modal content (the scrollable container)
       const modalContent = document.querySelector(".ui-modal-content");
 
-   
+
       // Get visible area height
       const containerHeight = modalContent
         ? modalContent.clientHeight
@@ -133,6 +133,8 @@ export const DatePicker = ({
       setSelectedDate(null);
       setInputValue("");
       setDisplayText("");
+      setCurrentMonth(today.getMonth());
+      setCurrentYear(today.getFullYear());
       if (onDateSelect) {
         onDateSelect(null);
       }
@@ -259,14 +261,13 @@ export const DatePicker = ({
       days.push(
         <td
           key={day}
-          className={`${
-            selectedDate &&
+          className={`${selectedDate &&
             selectedDate.getDate() === day &&
             selectedDate.getMonth() === currentMonth &&
             selectedDate.getFullYear() === currentYear
-              ? "selected"
-              : ""
-          } ${isToday ? "today" : ""} ${isWorkday ? "workday" : ""}`}
+            ? "selected"
+            : ""
+            } ${isToday ? "today" : ""} ${isWorkday ? "workday" : ""}`}
           onClick={() => handleDateClick(new Date(currentYear, currentMonth, day))}
         >
           {day}
@@ -298,13 +299,13 @@ export const DatePicker = ({
     weeks.push(<tr key={`week-${weeks.length}`}>{days}</tr>);
     return (
       <table><thead><tr>
-            {daysOfWeek.map((day, index) => (
-              <th key={index}>{day}</th>
-            ))}
-          </tr></thead><tbody>{weeks}</tbody></table>
+        {daysOfWeek.map((day, index) => (
+          <th key={index}>{day}</th>
+        ))}
+      </tr></thead><tbody>{weeks}</tbody></table>
     );
   };
-  
+
 
   const handlePrevMonth = (event) => {
     event.preventDefault();
@@ -374,7 +375,9 @@ export const DatePicker = ({
   const handleClearClick = () => {
     setSelectedDate(null);
     setInputValue("");
-
+    setDisplayText("");
+    setCurrentMonth(today.getMonth());
+    setCurrentYear(today.getFullYear());
     setShowCalendar(false);
     setShowMonthPicker(false);
     setShowYearPicker(false);
@@ -419,6 +422,8 @@ export const DatePicker = ({
               setSelectedDate(null);
               setInputValue("");
               setDisplayText("");
+              setCurrentMonth(today.getMonth());
+              setCurrentYear(today.getFullYear());
               if (onDateSelect) {
                 onDateSelect(null);
               }
