@@ -16,6 +16,10 @@
     /* Adjusted to fit within the 200px calendar width */
 }
 
+.disabled-background {
+    background-color: #e9ecef !important;
+}
+
 .date-input:focus {
     outline: none;
     border-color: #ced4da;
