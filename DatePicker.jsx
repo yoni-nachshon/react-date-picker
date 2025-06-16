@@ -411,27 +411,32 @@ export const DatePicker = ({
     );
   };
   return (
-    <div className="date-picker" ref={datePickerRef} style={style}>
+    <div
+    className={`date-picker ${disabled ? 'disabled-background' : ''}`}
+      ref={datePickerRef}
+      style={style}
+    >
       {displayText ? (
-        <div className="date-input"><div className="ui-filter-group-content">
-          {displayText}
-          <i
-            className="icofont-close-line-circled ui-remove-filter"
-            onClick={() => {
-              if (disabled) return;
-              setSelectedDate(null);
-              setInputValue("");
-              setDisplayText("");
-              setCurrentMonth(today.getMonth());
-              setCurrentYear(today.getFullYear());
-              if (onDateSelect) {
-                onDateSelect(null);
-              }
-            }}></i></div></div>
+        <div className={`date-input ${disabled ? 'disabled-background' : ''}`}>
+          <div className="ui-filter-group-content">
+            {displayText}
+            <i
+              className="icofont-close-line-circled ui-remove-filter"
+              onClick={() => {
+                if (disabled) return;
+                setSelectedDate(null);
+                setInputValue("");
+                setDisplayText("");
+                setCurrentMonth(today.getMonth());
+                setCurrentYear(today.getFullYear());
+                if (onDateSelect) {
+                  onDateSelect(null);
+                }
+              }}></i></div></div>
       ) : (
         <input
           type="text"
-          className="date-input"
+          className={`date-input ${disabled ? 'disabled-background' : ''}`}
           value={inputValue}
           onFocus={() => {
             setShowCalendar(true);
