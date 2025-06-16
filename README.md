@@ -9,6 +9,7 @@ The `DatePicker` component is a React-based date picker that allows users to sel
 - `onDateSelect`: A function that will be called when a date is selected. The function receives the selected date as a parameter.
 - `presetValues`: An array of preset values for date selection. Each value represents the number of days from the current date. A value of `null` represents a "no date" option.
 - `showPresetSelect`: Indicates whether to display the preset date selection component. If `true`, the component will be displayed; if `false`, it will not be displayed.
+- `disabled`: A boolean indicating whether the date input should be disabled. If `true`, the date input will be disabled and the background color will change; if `false`, the date input will be enabled.
 
 ### Usage:
 ```jsx
@@ -17,5 +18,6 @@ The `DatePicker` component is a React-based date picker that allows users to sel
     onDateSelect={(date) => console.log('Selected date:', date)}
     presetValues={[7, 14, 30, 60, 180, 365, null]}
     showPresetSelect={true}
+    disabled={false} // or true, depending on the requirement
 />
 
