@@ -412,7 +412,7 @@ export const DatePicker = ({
   };
   return (
     <div
-    className={`date-picker ${disabled ? 'disabled-background' : ''}`}
+      className={`date-picker ${disabled ? 'disabled-background' : ''}`}
       ref={datePickerRef}
       style={style}
     >
@@ -468,12 +468,13 @@ export const DatePicker = ({
       )}
       <div
         onClick={handleCalendarIconClick}
-        className={`calendar-icon-container ${showPresetSelect ? "" : "rounded-left"
-          }`}
+        className={`calendar-icon-container ${showPresetSelect ? "" : "rounded-left"}`}
+        style={{ cursor: disabled ? 'default' : 'pointer' }}
       ><i className="icofont-calendar"></i></div>
       {showPresetSelect && (
         <div
           className="preset-select"
+          style={{ cursor: disabled ? 'default' : 'pointer' }}
           onClick={() => {
             if (disabled) return;
             setShowPresetDropdown(!showPresetDropdown);
@@ -482,7 +483,10 @@ export const DatePicker = ({
             }
           }}
           ref={presetDropdownRef}
-        ><i className="icofont-caret-down ui-icon-arrows"></i>
+        ><i
+          className="icofont-caret-down ui-icon-arrows"
+          style={{ cursor: disabled ? 'default' : 'pointer' }}
+        ></i>
           {showPresetDropdown && (
             <div className="preset-dropdown">
               {presetDates?.map((preset, index) => (
