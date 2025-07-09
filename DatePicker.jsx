@@ -96,52 +96,40 @@ export const DatePicker = ({
   const [selectedPreset, setSelectedPreset] = useState("");
   const [showPresetDropdown, setShowPresetDropdown] = useState(false);
 
-  function calculateDaysAgo(dateString) {
-    const givenDate = new Date(dateString);
-    const currentDate = new Date();
-
-    // Calculate the difference in time
-    const timeDifference = currentDate - givenDate;
-
-    // Convert time difference from milliseconds to days
-    const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-
-    // Return the negative of the days difference
-    return -daysDifference;
-  }
-
-  const startOfYear = new Date(new Date().getFullYear(), 0, 1).toISOString();
-  const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
-
-  const daysAgoStartOfYear = calculateDaysAgo(startOfYear);
-  const daysAgoStartOfMonth = calculateDaysAgo(startOfMonth);
-
   const titleMap = {
     7: "שבוע",
     14: "שבועיים",
     30: "חודש",
     60: "חודשיים",
     180: "חצי שנה",
-    365: "שנה",
-    [daysAgoStartOfMonth]: "מתחילת החודש",
-    [daysAgoStartOfYear]: "מתחילת השנה",
-    [-365]: "שנה אחורה"
+    365: "שנה"
   };
 
   function formatDisplayText(date) {
     return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
   }
 
+
   const generatePresetDates = (values) => {
-    return values?.map((value) => {
-      if (value === null) {
+    return values?.map((item) => {
+      if (item === null) {
         return { label: "ללא", value: null };
-      } else {
-        const label = titleMap[value] || `${value} יום`;
-        return { label, value };
       }
+
+      if (typeof item === "object" && item !== null) {
+        return {
+          label: item.label || titleMap[item.value] || `${item.value} יום`,
+          value: item.value
+        };
+      }
+
+      return {
+        label: titleMap[item] || `${item} יום`,
+        value: item
+      };
     });
   };
+
 
   const presetDates = generatePresetDates(presetValues);
 
